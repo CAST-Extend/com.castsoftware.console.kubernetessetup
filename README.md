@@ -13,7 +13,7 @@ Make sure your kubernetes cluster is up and helm is installed on your system.
 
 Create kubernetes namespace where you want to install Imaging Console system
 
-Below command will create namespace imaging
+Below command will create namespace console
 ```
 kubectl create ns console
 
