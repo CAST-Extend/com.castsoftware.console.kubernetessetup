@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    console.service: dashboards
+    version: {{ .Values.DashboardsImage.tag| default .Values.version }}
+  name: dashboards
+  namespace: {{ .Release.Namespace }}  
+spec:
+  replicas: {{ .Values.DashboardReplicaCount }}
+  selector:
+    matchLabels:
+      console.service: dashboards
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        console.network/aip-network: "true"
+        console.service: dashboards
+    spec:
+      containers:
+        - image: "{{ .Values.DashboardsImage.name }}:{{ .Values.DashboardsImage.tag}}"
+          imagePullPolicy: "{{ .Values.DashboardsImage.pullPolicy }}"
+          lifecycle:
+            postStart:
+              exec:
+                command: 
+                    - /bin/sh
+                    - -c
+                    - touch /app/domains/datasource.properties /app/domains/domains.properties
+          name: dashboards
+          ports:
+            - containerPort: 8087
+              hostPort: 8087
+              protocol: TCP
+          resources:
+            {{- toYaml .Values.DashboardsResources | nindent 12 }}
+          volumeMounts:
+            - mountPath: /app/domains
+              name: restapi-domains
+            - name: log4j2
+              mountPath: /app/resources/log4j2-spring.xml
+              subPath: log4j2-spring.xml
+      restartPolicy: Always
+      volumes:
+        - name: restapi-domains
+          persistentVolumeClaim:
+            claimName: restapi-domains 
+        - name: log4j2
+          configMap:
+            name: log4j2conf  

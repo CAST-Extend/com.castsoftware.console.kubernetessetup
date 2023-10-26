@@ -1,0 +1,64 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    console.service: keycloak
+    version: {{ .Values.KeycloakImage.tag| default .Values.version }}
+  namespace: {{ .Release.Namespace }}
+  name: keycloak
+spec:
+  replicas: {{ .Values.KeycloakReplicaCount }}
+  selector:
+    matchLabels:
+      console.service: keycloak
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        console.network/aip-network: "true"
+        console.service: keycloak
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: kubernetes.io/hostname
+                operator: In
+                values:
+                - {{ .Values.ConsoleHost.name }}
+      containers:
+        - env:
+            - name: DB_ADDR
+              value: postgres:2285
+            - name: DB_PASSWORD
+              value: keycloak
+            - name: DB_USER
+              value: keycloak
+            - name: DB_VENDOR
+              value: POSTGRES
+            - name: KEYCLOAK_IMPORT
+              value: /tmp/aip-realm.json
+            - name: KEYCLOAK_PASSWORD
+              value: admin
+            - name: KEYCLOAK_USER
+              value: admin
+          image: "{{ .Values.KeycloakImage.name }}:{{ .Values.KeycloakImage.tag}}"
+          imagePullPolicy: "{{ .Values.KeycloakImage.pullPolicy }}"
+          livenessProbe:
+            exec:
+              command:
+                - curl
+                - -f
+                - http://keycloak:8086/auth/
+            failureThreshold: 15
+            periodSeconds: 5
+            timeoutSeconds: 2
+          name: keycloak
+          ports:
+            - containerPort: 8080
+              hostPort: 8086
+              protocol: TCP
+          resources:
+            {{- toYaml .Values.KeycloakResources | nindent 12 }}
+      restartPolicy: Always

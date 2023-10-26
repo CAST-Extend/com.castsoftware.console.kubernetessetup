@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    console.service: aip-node
+    version: {{ .Values.AipNodeImage.tag| default .Values.version }}
+  name: aip-node
+  namespace: {{ .Release.Namespace }}   
+spec:
+  replicas: {{ .Values.AipNodeReplicaCount }}
+  selector:
+    matchLabels:
+      console.service: aip-node
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        console.network/aip-network: "true"
+        console.service: aip-node
+    spec: 
+      containers:
+        - env:
+            - name: CONSOLE_REGISTRY_URL
+              value: http://aip-service-registry:8088
+          image: "{{ .Values.AipNodeImage.name }}:{{ .Values.AipNodeImage.tag}}"
+          imagePullPolicy: "{{ .Values.AipNodeImage.pullPolicy }}"
+          name: aip-node
+          ports:
+            - containerPort: 8089
+              hostPort: 8089
+              protocol: TCP
+          resources:
+            {{- toYaml .Values.AipNodeResources | nindent 12 }}
+          volumeMounts:
+            - mountPath: /usr/share/CAST
+              name: aip-node-cast
+            - mountPath: /home/aip-node-data
+              name: aip-node-data
+      imagePullSecrets:
+        - name: castplatman-sec              
+      restartPolicy: Always
+      volumes:
+        - name: aip-node-cast
+          persistentVolumeClaim:
+            claimName: aip-node-cast
+        - name: aip-node-data
+          persistentVolumeClaim:
+            claimName: aip-node-data 

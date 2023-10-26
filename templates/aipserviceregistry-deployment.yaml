@@ -1,0 +1,71 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    console.service: aip-service-registry
+    version: {{ .Values.AipServiceRegistryImage.tag| default .Values.version }}
+  name: aip-service-registry
+  namespace: {{ .Release.Namespace }}
+spec:
+  replicas: {{ .Values.AipServiceRegistryReplicaCount }}
+  selector:
+    matchLabels:
+      console.service: aip-service-registry
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        console.network/aip-network: "true"
+        console.service: aip-service-registry
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: kubernetes.io/hostname
+                operator: In
+                values:
+                - {{ .Values.ConsoleHost.name }}
+      containers:
+        - env:
+            - name: DELIVERY_FOLDER
+              value: /home/aip-node-data/delivery
+            - name: DEPLOY_FOLDER
+              value: /home/aip-node-data/deploy
+            - name: ENCRYPT_KEY
+            - name: GATEWAY_URI
+            - name: HOST_HOSTNAME
+              value: {{ .Values.ConsoleHost.name }}
+            - name: SHARED_FOLDER
+              value: /home/aip-node-data/common-data
+            - name: SMTP_AUTH
+            - name: SMTP_HOST
+            - name: SMTP_PASSWORD
+            - name: SMTP_PORT
+            - name: SMTP_SENDER
+            - name: SMTP_STARTTLS_ENABLE
+            - name: SMTP_TRANSPORT_PROTOCOL
+            - name: SMTP_USERNAME
+          image: "{{ .Values.AipServiceRegistryImage.name }}:{{ .Values.AipServiceRegistryImage.tag}}"
+          imagePullPolicy: "{{ .Values.AipServiceRegistryImage.pullPolicy }}"
+          livenessProbe:
+            exec:
+              command:
+                - curl
+                - -f
+                - http://aip-service-registry:8088/
+            failureThreshold: 15
+            periodSeconds: 5
+            timeoutSeconds: 2
+          name: aip-service-registry
+          ports:
+            - containerPort: 2281
+              hostPort: 2281
+              protocol: TCP
+            - containerPort: 8088
+              hostPort: 8088
+              protocol: TCP
+          resources:
+            {{- toYaml .Values.AipServiceRegistryResources | nindent 12 }}
+      restartPolicy: Always

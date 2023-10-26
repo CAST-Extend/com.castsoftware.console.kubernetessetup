@@ -1,0 +1,96 @@
+apiVersion: v1
+data:
+  log4j2-spring.xml: "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n
+<Configuration>\n
+\t<Properties>\n
+\t\t<Property name=\"logPath\">${log4j:configParentLocation}/logs</Property>\t<!-- parent folder of absolute path to the log4j configuration file -->\n
+\t\t<!--\n
+\t\tSet the auditLevel property's value to enable/disable the audit trail:\n
+\t\t\t- OFF -> audit trail is disabled\n
+\t\t\t- ALL -> audit trail is enabled\n
+\t\t -->\n
+\t\t <Property name=\"auditLevel\">OFF</Property>\n
+\t</Properties>\n
+\t\n
+\t<Appenders>\n
+\t\t<Console name=\"stdout\" target=\"SYSTEM_OUT\">\n
+\t\t\t<PatternLayout pattern=\"%d %5p [%t] %-40logger{1.} : %m%n\"/>\t<!-- %logger{36} does not work as expected, try log4j2 over slf4j ? -->\n
+\t\t</Console>\n
+
+\t\t<RollingFile name=\"textout\" fileName=\"${logPath}/restapi.log\" filePattern=\"${logPath}/restapi-%d{yyyy-MM-dd}.log\">\n
+\t\t\t<PatternLayout pattern=\"%d %5p [%t] %-40logger{1.} : %m%n\" charset=\"UTF-8\"/>\n
+\t\t\t<Policies>\n
+\t\t\t\t<SizeBasedTriggeringPolicy size=\"10 MB\"/>\t<!-- roll over the log when the log size reaches 10 MB -->\n
+\t\t\t</Policies>\n
+\t\t\t<DefaultRolloverStrategy max=\"5\"/>\t<!-- keep only the last 5 archived log files apart from the current restapi.log -->\n
+\t\t</RollingFile>\n
+
+\t\t<Routing name=\"audittrail\">\n
+\t\t\t<Routes pattern=\"${auditLevel}\">\n
+\t\t\t\t<Route>\n
+\t\t\t    \t<RollingFile name=\"AuditTrail-active\" fileName=\"${logPath}/restapi.audit.log\" filePattern=\"${logPath}/restapi.audit-%d{yyyy-MM-dd}.log\">\n
+\t\t\t      \t\t<PatternLayout pattern=\"%date{DEFAULT} | %mdc{audittrail.remotehost} | %level | %message | %mdc{audittrail.restURL}  %mdc{audittrail.username}  %mdc{audittrail.userrole}  %mdc{audittrail.delay}  %mdc{audittrail.client} | %mdc{audittrail.application}%n\"\n
+\t\t\t      \t\t\t\t\t   charset=\"UTF-8\"/>\n
+\t\t\t\t\t\t<Policies>\n
+\t\t\t\t\t\t\t<SizeBasedTriggeringPolicy size=\"10 MB\"/>\n
+\t\t\t\t\t\t</Policies>\n
+\t\t\t\t\t\t<DefaultRolloverStrategy max=\"5\"/>\n
+\t\t\t    \t</RollingFile>\n
+\t\t\t\t</Route>\n
+\t\t\t\t<Route key=\"OFF\">\n
+\t\t\t\t\t<Console name=\"AuditTrail-inactive\" target=\"SYSTEM_OUT\">\n
+      \t\t\t\t\t<PatternLayout pattern=\"%n\"/>\n
+    \t\t\t\t</Console>\n
+\t\t\t\t</Route>\n
+\t\t\t</Routes>\n
+\t\t</Routing>\n
+\t</Appenders>\n
+\t\n
+\t<Loggers>\t\n
+\t\t<Logger name=\"com.castsoftware.adg.webservice\" level=\"info\" additivity=\"false\">\t<!-- write in restapi.log all messages from com.castsoftware.adg.webservice with level <= INFO -->\n
+\t\t\t<AppenderRef ref=\"textout\"/>\n
+\t\t\t<AppenderRef ref=\"stdout\"/>\n
+\t\t</Logger>\n
+\t\t<Logger name=\"org.springframework\" level=\"info\" additivity=\"false\">\n
+\t\t\t<AppenderRef ref=\"textout\"/>\n
+\t\t\t<AppenderRef ref=\"stdout\"/>\n
+\t\t</Logger>\n
+\t\t<!-- log every SQL query (put level=TRACE if you want the ? parameters also) -->\n
+\t\t<!-- <Logger name=\"org.springframework.jdbc.core\" level=\"debug\" additivity=\"false\">\t\n
+\t\t\t<AppenderRef ref=\"textout\"/>\n
+\t\t</Logger> -->\n
+\t\t\n
+\t\t<!-- set ${auditlevel} = ALL to get audit-trail -->\n
+\t\t<!-- <Logger name=\"com.castsoftware.adg.webservice.monitoring.MonitoringRequestDispatcher\" level=\"${auditLevel}\" additivity=\"false\">\n
+\t\t\t<AppenderRef ref=\"audittrail\"/>\n
+\t\t</Logger> -->\n
+\t\t<Logger name=\"com.castsoftware.adg.webservice.monitoring.AuditTrail\" level=\"${auditLevel}\" additivity=\"false\">\n
+\t\t\t<AppenderRef ref=\"audittrail\" />\n
+\t\t</Logger>\n
+\t\t\n
+\t\t<!-- Uncomment on LDAP access issues -->\n
+\t\t<!-- \n
+\t\t<Logger name=\"org.springframework.security\" level=\"debug\">\n
+\t\t\t<AppenderRef ref=\"textout\"/>\n
+\t\t</Logger>\t\t\n
+\t\t-->\n
+\t\t<!-- Uncomment on SAML access issues -->\n
+\t\t<!-- \n
+\t\t<Logger name=\"org.springframework.security.saml\" level=\"debug\" additivity=\"false\">\n
+        \t        <AppenderRef ref=\"textout\"/>\n
+                </Logger>\n
+\t        <Logger name=\"org.opemsaml\" level=\"debug\" additivity=\"false\">\n
+\t\t\t<AppenderRef ref=\"textout\"/>\n
+\t\t</Logger>\n
+\t\t-->\n
+\t\t\n
+\t\t<Root level=\"info\">\n
+\t\t    <AppenderRef ref=\"textout\"/>\n
+\t\t\t<AppenderRef ref=\"stdout\"/>\n
+\t\t</Root>\n
+\t</Loggers>\n
+</Configuration>\n"
+kind: ConfigMap
+metadata:
+  name: log4j2conf
+  namespace: {{ .Release.Namespace }}

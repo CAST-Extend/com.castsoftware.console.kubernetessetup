@@ -1,0 +1,65 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: db-data
+  namespace: console
+  labels:
+    console.service: db-data
+spec:
+  volumeName: pv-console-db-data
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: console-local-storage
+  resources:
+    requests:
+      storage: 50Gi
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: restapi-domains
+  namespace: console
+  labels:
+    console.service: restapi-domains
+spec:
+  volumeName: pv-console-restapi-domains
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: console-local-storage
+  resources:
+    requests:
+      storage: 10Mi
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: aip-node-cast
+  namespace: console
+  labels:
+    console.service: aip-node-cast
+spec:
+  volumeName: pv-console-aip-node-cast
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: console-local-storage
+  resources:
+    requests:
+      storage: 10Gi
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: aip-node-data
+  namespace: console
+  labels:
+    console.service: aip-node-data
+spec:
+  volumeName: pv-console-aip-node-data
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: console-local-storage
+  resources:
+    requests:
+      storage: 10Gi
+ 
+      

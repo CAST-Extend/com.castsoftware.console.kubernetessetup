@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    console.service: aip-gateway
+    version: {{ .Values.AipGatewayImage.tag| default .Values.version }}
+  name: aip-gateway
+  namespace: {{ .Release.Namespace }}  
+spec:
+  replicas: {{ .Values.AipGatewayReplicaCount }}
+  selector:
+    matchLabels:
+      console.service: aip-gateway
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        console.network/aip-network: "true"
+        console.service: aip-gateway
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: kubernetes.io/hostname
+                operator: In
+                values:
+                - {{ .Values.ConsoleHost.name }}
+      containers:
+        - image: "{{ .Values.AipGatewayImage.name }}:{{ .Values.AipGatewayImage.tag}}"
+          imagePullPolicy: "{{ .Values.AipGatewayImage.pullPolicy }}"
+          name: aip-gateway
+          ports:
+            - containerPort: 8081
+              hostPort: 8081
+              protocol: TCP
+          resources:
+            {{- toYaml .Values.AipGatewayResources | nindent 12 }}
+      restartPolicy: Always

@@ -24,11 +24,12 @@ Create Imaging storage
 # A sample storage configuration is provided in console-pv.yaml and console-pvc.yaml.
 # Edit the files before applying them:
 #  -> specify the host name of the node on which the local Persistent Volumes will be created
-#  -> adjust the physical path of each Persistent Volume to match local folders
+#     (replace <imaging-host> in each 3 Persistent Volume specification)
+#  -> adjust the physical path of each Persistent Volume to match local folders on <imaging-host>
 # IMPORTANT NOTE: this storage configuration is based on Persistent Volumes of type "local".
 #                 As "local" Persistent Volumes are by nature attached to a specific node. 
 #                 When changing pod names in pv definitions, make sure that the pv which are currently
-#                 grouped on same node will remain grouped the same way with the new node names.
+#                 grouped on same node will remain grouped the same way with the new pod names.
 #                 Furthermore, the value for ConsoleHost.name defined in values.yaml should match
 #                 the node selected in the nodeAffinity section of pv-console-db-data and pv-console-restapi-domains.
 # To apply the configuration:

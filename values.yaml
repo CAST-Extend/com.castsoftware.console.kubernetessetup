@@ -1,0 +1,91 @@
+# Default values for imaging-system.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+version: 2.10.1
+
+PostgresReplicaCount: 1
+KeycloakReplicaCount: 1
+AipServiceRegistryReplicaCount: 1
+AipGatewayReplicaCount: 1
+AipNodeImageReplicaCount: 1
+DashboardsReplicaCount: 1
+
+PostgresImage:
+  name: quay.io/enterprisedb/postgresql
+  tag: 13.3
+  pullPolicy: IfNotPresent
+
+KeycloakImage:
+  name: castimaging/aip-sso
+  tag: 1.3.0
+  pullPolicy: IfNotPresent
+
+AipServiceRegistryImage:
+  name: castimaging/aip-service-registry
+  tag: 2.10.1
+  pullPolicy: IfNotPresent
+   
+AipGatewayImage:
+  name: castimaging/aip-gateway
+  tag: 2.10.1
+  pullPolicy: IfNotPresent  
+  
+AipNodeImage:
+  name: castbuild/aip_node_v2_linux
+  tag: latest
+  pullPolicy: Always 
+
+DashboardsImage:
+  name: castimaging/dashboards-v2
+  tag: 2.11.3
+  pullPolicy: IfNotPresent
+
+
+DashboardsService:
+  type: NodePort
+  port: 30087
+
+ConsoleHost:
+  name: kubtest3  
+
+ 
+PostgresResources:
+  requests:
+    cpu: 1
+    memory: 8G
+KeycloakResources:
+  # limits:
+    # cpu: 1
+    # memory: 1G
+  requests:
+    cpu: 0.1
+    memory: 100M
+AipServiceRegistryResources:
+  # limits:
+    # cpu: 1
+    # memory: 1G
+  requests:
+    cpu: 0.1
+    memory: 100M
+AipGatewayResources:
+  # limits:
+    # cpu: 1
+    # memory: 1G
+  requests:
+    cpu: 0.1
+    memory: 100M
+AipNodeImageResources:
+  requests:
+    cpu: 1
+    memory: 8G
+DashboardsResources:
+  # limits:
+    # cpu: 1
+    # memory: 1G
+  requests:
+    cpu: 0.1
+    memory: 100M
+
+storageClassName:
+  name: console-local-storage

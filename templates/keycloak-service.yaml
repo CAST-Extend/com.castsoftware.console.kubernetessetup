@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    console.service: keycloak
+  name: keycloak
+  namespace: {{ .Release.Namespace }}  
+spec:
+  ports:
+    - name: "8086"
+      port: 8086
+      targetPort: 8080
+  selector:
+    console.service: keycloak
+  type: NodePort
