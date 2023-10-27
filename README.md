@@ -37,17 +37,15 @@ kubectl create ns console
 Create Console storage
 ```
 # A sample storage configuration is provided in console-pv.yaml and console-pvc.yaml.
-# Edit the files before applying them:
-#  -> adjust the physical path of each Persistent Volume to match local folders
-#  -> specify the host name of the node on which the local Persistent Volumes will be created
-# Important rule to follow regarding nodes:
+# Edit those files before applying them:
+#  -> adjust the physical path of each Persistent Volume to match your local folders
+#  -> specify the node on which the local Persistent Volumes will be created
+# Important rule to follow regarding node affinity:
 #          This storage configuration is based on Persistent Volumes of type "local",
 #          meaning they have to be attached to a specific node. 
 #          When customizing the node names in console-pv.yaml, make sure that:
-#          - pv-console-db-data and pv-console-restapi-domains are on node ConsoleHost.name
-#          - pv-console-aip-node-cast and pv-console-aip-node-data are on same node (can be any node)
-#          Furthermore, the value for ConsoleHost.name defined in values.yaml should match
-#          the node selected for pv-console-db-data and pv-console-restapi-domains.
+#          - pv-console-db-data and pv-console-restapi-domains are placed on node set in ConsoleHost.name variable
+#          - pv-console-aip-node-cast and pv-console-aip-node-data are placed on same node (can be any node)
 # To apply the configuration:
 
 kubectl apply -f console-pv.yaml
