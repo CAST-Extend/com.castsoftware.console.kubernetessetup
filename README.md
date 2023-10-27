@@ -9,7 +9,7 @@ CAST Console Enterprise Edition is a Web Application which provides the services
 
 ## Important Note
 
-Out of the 5 pods used by Console, 4 of them must be attached to the same node of the cluster, called the ConsoleHost:
+Out of the 6 pods used by Console, 5 of them must be attached to the same node of the cluster, called the ConsoleHost:
 
   - postgres
   - keycloak
