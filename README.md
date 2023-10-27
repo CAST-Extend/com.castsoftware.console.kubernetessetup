@@ -34,7 +34,7 @@ kubectl create ns console
 
 ```
 
-Create Imaging storage
+Create Console storage
 ```
 # A sample storage configuration is provided in console-pv.yaml and console-pvc.yaml.
 # Edit the files before applying them:
