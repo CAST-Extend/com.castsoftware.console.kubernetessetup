@@ -29,8 +29,8 @@ Create Imaging storage
 #                 As "local" Persistent Volumes are by nature attached to a specific node. 
 #                 When changing node names in Persistent Volumes definitions, make sure that they
 #                 remain grouped the same way:
-#                 - pv-console-aip-node-cast and pv-console-aip-node-data should be on same node
-#                 - pv-console-db-data and pv-console-restapi-domains should be on same node
+#                 - pv-console-aip-node-cast and pv-console-aip-node-data must be on same node
+#                 - pv-console-db-data and pv-console-restapi-domains must be on same node
 #                 Furthermore, the value for ConsoleHost.name defined in values.yaml should match
 #                 the node selected for pv-console-db-data and pv-console-restapi-domains.
 # To apply the configuration:
