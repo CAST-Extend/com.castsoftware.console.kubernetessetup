@@ -19,7 +19,7 @@ Out of the 6 pods used by Console, 5 of them must be attached to the same node o
 
 ConsoleHost must be set in variable ConsoleHost.name defined in values.yaml
 
-The remaining pod can be placed on any node:
+The remaining pod can go on any node:
   - aip-node
 
 ## Setup
