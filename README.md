@@ -44,7 +44,7 @@ Create Console storage
 #          This storage configuration is based on Persistent Volumes of type "local",
 #          meaning they have to be attached to a specific node. 
 #          When customizing the node names in console-pv.yaml, make sure that:
-#          - pv-console-db-data and pv-console-restapi-domains are placed on node set in ConsoleHost.name variable
+#          - pv-console-db-data and pv-console-restapi-domains are placed on node name matching the value set in ConsoleHost.name variable
 #          - pv-console-aip-node-cast and pv-console-aip-node-data are placed on same node (can be any node)
 # To apply the configuration:
 
