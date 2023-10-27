@@ -2,6 +2,11 @@
 
 CAST Console Enterprise Edition is a Web Application which provides the services required to configure and run CAST analyses remotely, on multiple analysis machines. It supports the full analysis process from registering applications to Imaging publication. This setup contains the components required to install CAST Console Enterprise Edition Services.
 
+## Pre-requisites
+
+- Kubernetes
+- helm
+
 ## Important Note
 
 Out of the 5 pods used by Console, 4 of them must be attached to the same node of the cluster, called the ConsoleHost:
@@ -15,12 +20,7 @@ Out of the 5 pods used by Console, 4 of them must be attached to the same node o
 The remaining pod can be placed on any node:
   - aip-node
 
-ConsoleHost must be set in values.yaml (ConsoleHost.name).
-
-## Pre-requisites
-
-- Kubernetes
-- helm
+ConsoleHost must be set in variable ConsoleHost.name defined in values.yaml
 
 ## Setup
 
