@@ -27,10 +27,12 @@ Create Imaging storage
 #  -> adjust the physical path of each Persistent Volume to match local folders
 # IMPORTANT NOTE: this storage configuration is based on Persistent Volumes of type "local".
 #                 As "local" Persistent Volumes are by nature attached to a specific node. 
-#                 When changing pod names in pv definitions, make sure that the pv which are currently
-#                 grouped on same node will remain grouped the same way with the new node names.
+#                 When changing node names in Persistent Volumes definitions, make sure that they
+#                 remain grouped the same way:
+#                 - pv-console-aip-node-cast and pv-console-aip-node-data should be on same node
+#                 - pv-console-db-data and pv-console-restapi-domains should be on same node
 #                 Furthermore, the value for ConsoleHost.name defined in values.yaml should match
-#                 the node selected in the nodeAffinity section of pv-console-db-data and pv-console-restapi-domains.
+#                 the node selected for pv-console-db-data and pv-console-restapi-domains.
 # To apply the configuration:
 
 kubectl apply -f console-pv.yaml
