@@ -4,6 +4,9 @@
 
 version: 2.10.1
 
+ConsoleHost:
+  name: kubtest3  
+  
 PostgresReplicaCount: 1
 KeycloakReplicaCount: 1
 AipServiceRegistryReplicaCount: 1
@@ -46,10 +49,7 @@ DashboardsService:
   type: NodePort
   port: 30087
 
-ConsoleHost:
-  name: kubtest3  
 
- 
 PostgresResources:
   requests:
     cpu: 1
