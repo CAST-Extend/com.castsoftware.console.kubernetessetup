@@ -39,7 +39,7 @@ Create Console storage
 # A sample storage configuration is provided in console-pv.yaml and console-pvc.yaml.
 # Edit those files before applying them:
 #  -> adjust the physical path of each Persistent Volume to match your local folders
-#  -> specify the node on which the local Persistent Volumes will be created
+#  -> specify the node on which each local Persistent Volumes will be created
 # Important rule to follow regarding node affinity:
 #          This storage configuration is based on Persistent Volumes of type "local",
 #          meaning they have to be attached to a specific node. 
