@@ -35,8 +35,8 @@ AipGatewayImage:
   pullPolicy: IfNotPresent  
   
 AipNodeImage:
-  name: castbuild/aip_node_v2_linux
-  tag: latest
+  name: castimaging/aip_node_v2_linux
+  tag: 2.10.1
   pullPolicy: Always 
 
 DashboardsImage:
