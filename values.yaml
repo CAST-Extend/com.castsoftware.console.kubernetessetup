@@ -2,15 +2,15 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
-version: 2.10.1
+version: 2.11.2
 
 ConsoleHost:
-  name: kubtest3  
+  name: kubtest3
   
 extendproxyservice:
   type: NodePort
   port: 30085
-  pubextendurl: "https://extend-integration.castsoftware.com"  
+  pubextendurl: "https://extend.castsoftware.com"
   
 PostgresReplicaCount: 1
 KeycloakReplicaCount: 1
@@ -26,28 +26,28 @@ PostgresImage:
   pullPolicy: IfNotPresent
 KeycloakImage:
   name: castimaging/aip-sso
-  tag: 1.3.0
+  tag: 1.5.0
   pullPolicy: IfNotPresent
 AipServiceRegistryImage:
   name: castimaging/aip-service-registry
-  tag: 2.10.1
-  pullPolicy: IfNotPresent 
+  tag: 2.11.2
+  pullPolicy: IfNotPresent
 AipGatewayImage:
   name: castimaging/aip-gateway
-  tag: 2.10.1
-  pullPolicy: IfNotPresent  
+  tag: 2.11.2
+  pullPolicy: IfNotPresent   
 AipNodeImage:
   name: castimaging/aip_node_v2_linux
-  tag: 2.10.1
-  pullPolicy: Always
+  tag: 2.11.0_release_build385
+  pullPolicy: IfNotPresent
 DashboardsImage:
   name: castimaging/dashboards-v2
-  tag: 2.11.3
+  tag: 2.11.7
   pullPolicy: IfNotPresent
 ExtendProxyImage:
   name: castimaging/extend-proxy
-  tag: 1.0.0.1410
-  pullPolicy: IfNotPresent    
+  tag: 1.0.0.1468
+  pullPolicy: IfNotPresent  
 
 DashboardsService:
   type: NodePort
@@ -55,7 +55,7 @@ DashboardsService:
 
 PostgresResources:
   requests:
-    cpu: 1
+    cpu: 0.3
     memory: 8G
 KeycloakResources:
   # limits:
@@ -80,7 +80,7 @@ AipGatewayResources:
     memory: 100M
 AipNodeImageResources:
   requests:
-    cpu: 1
+    cpu: 0.3
     memory: 8G
 DashboardsResources:
   # limits:
@@ -96,6 +96,6 @@ ExtendProxyResources:
   requests:
     cpu: 0.1
     memory: 100M
-
+    
 storageClassName:
   name: console-local-storage
