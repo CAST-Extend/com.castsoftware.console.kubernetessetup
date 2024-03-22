@@ -9,7 +9,7 @@ CAST Console Enterprise Edition is a Web Application which provides the services
 
 ## Important Note
 
-Out of the 6 pods used by Console, 5 of them must be attached to the same node of the cluster, called the ConsoleHost:
+Out of the 7 pods used by Console, 5 must be attached to the same node of the cluster, called the ConsoleHost:
 
   - postgres
   - keycloak
@@ -19,8 +19,9 @@ Out of the 6 pods used by Console, 5 of them must be attached to the same node o
 
 ConsoleHost must be set in variable ConsoleHost.name defined in values.yaml
 
-The remaining pod can go on any node:
+The remaining pods can go on any node:
   - aip-node
+  - extend-proxy
 
 ## Setup
 
