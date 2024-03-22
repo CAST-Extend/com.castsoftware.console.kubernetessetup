@@ -7,48 +7,51 @@ version: 2.10.1
 ConsoleHost:
   name: kubtest3  
   
+extendproxyservice:
+  type: NodePort
+  port: 30085
+  pubextendurl: "https://extend-integration.castsoftware.com"  
+  
 PostgresReplicaCount: 1
 KeycloakReplicaCount: 1
 AipServiceRegistryReplicaCount: 1
 AipGatewayReplicaCount: 1
 AipNodeImageReplicaCount: 1
 DashboardsReplicaCount: 1
+ExtendProxyReplicaCount: 1
 
 PostgresImage:
   name: quay.io/enterprisedb/postgresql
   tag: 13.3
   pullPolicy: IfNotPresent
-
 KeycloakImage:
   name: castimaging/aip-sso
   tag: 1.3.0
   pullPolicy: IfNotPresent
-
 AipServiceRegistryImage:
   name: castimaging/aip-service-registry
   tag: 2.10.1
-  pullPolicy: IfNotPresent
-   
+  pullPolicy: IfNotPresent 
 AipGatewayImage:
   name: castimaging/aip-gateway
   tag: 2.10.1
   pullPolicy: IfNotPresent  
-  
 AipNodeImage:
   name: castimaging/aip_node_v2_linux
   tag: 2.10.1
-  pullPolicy: Always 
-
+  pullPolicy: Always
 DashboardsImage:
   name: castimaging/dashboards-v2
   tag: 2.11.3
   pullPolicy: IfNotPresent
-
+ExtendProxyImage:
+  name: castimaging/extend-proxy
+  tag: 1.0.0.1410
+  pullPolicy: IfNotPresent    
 
 DashboardsService:
   type: NodePort
   port: 30087
-
 
 PostgresResources:
   requests:
@@ -80,6 +83,13 @@ AipNodeImageResources:
     cpu: 1
     memory: 8G
 DashboardsResources:
+  # limits:
+    # cpu: 1
+    # memory: 1G
+  requests:
+    cpu: 0.1
+    memory: 100M
+ExtendProxyResources:
   # limits:
     # cpu: 1
     # memory: 1G

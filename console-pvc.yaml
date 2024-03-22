@@ -33,6 +33,22 @@ spec:
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
+  name: extendproxy
+  namespace: console
+  labels:
+    console.service: extendproxy
+spec:
+  volumeName: pv-extendproxy
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: console-local-storage
+  resources:
+    requests:
+      storage: 5Gi
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
   name: aip-node-cast
   namespace: console
   labels:
@@ -61,5 +77,3 @@ spec:
   resources:
     requests:
       storage: 10Gi
- 
-      

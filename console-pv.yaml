@@ -63,6 +63,33 @@ spec:
 apiVersion: v1
 kind: PersistentVolume
 metadata:
+  name: pv-extendproxy
+  namespace: console
+spec:
+  capacity:
+    storage: 5Gi
+  volumeMode: Filesystem
+  accessModes:
+  - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: console-local-storage
+  local:
+    path: "/home/jar/pv/extendproxy"
+  claimRef:
+    namespace: console
+    name: extendproxy
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+      - matchExpressions:
+        - key: kubernetes.io/hostname
+          operator: In
+          values:
+          - kubtest3
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
   name: pv-console-aip-node-cast
   namespace: console
 spec:
