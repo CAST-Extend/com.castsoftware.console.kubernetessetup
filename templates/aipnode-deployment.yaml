@@ -36,9 +36,7 @@ spec:
             - mountPath: /usr/share/CAST
               name: aip-node-cast
             - mountPath: /home/aip-node-data
-              name: aip-node-data
-      imagePullSecrets:
-        - name: castplatman-sec              
+              name: aip-node-data              
       restartPolicy: Always
       volumes:
         - name: aip-node-cast
