@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    console.service: extendproxy
+    version: {{ .Values.ExtendProxyImage.tag| default .Values.version }}
+  name: extendproxy
+  namespace: {{ .Release.Namespace }}   
+spec:
+  replicas: {{ .Values.ExtendProxyReplicaCount }}
+  selector:
+    matchLabels:
+      console.service: extendproxy
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        console.network/aip-network: "true"
+        console.service: extendproxy
+    spec: 
+      containers:
+        - env:
+            - name: host_port
+              value: "8085"
+            - name: host_name
+              value: "{{ .Values.ConsoleHost.name }}"
+            - name: ext_public_url
+              value: "{{ .Values.extendproxyservice.pubextendurl }}"
+          image: "{{ .Values.ExtendProxyImage.name }}:{{ .Values.ExtendProxyImage.tag}}"
+          imagePullPolicy: "{{ .Values.ExtendProxyImage.pullPolicy }}"
+          name: extendproxy
+          ports:
+            - containerPort: 8085
+              hostPort: 8085
+              protocol: TCP
+          resources:
+            {{- toYaml .Values.ExtendProxyResources | nindent 12 }}
+          volumeMounts:
+            - mountPath: /opt/cast_extend_proxy
+              name: extendproxy
+      restartPolicy: Always
+      volumes:
+        - name: extendproxy
+          persistentVolumeClaim:
+            claimName: extendproxy
